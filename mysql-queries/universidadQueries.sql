@@ -15,4 +15,16 @@ SELECT pe.apellido1, pe.apellido2, pe.nombre FROM persona pe RIGHT JOIN profesor
 SELECT d.nombre FROM departamento d LEFT JOIN profesor P ON d.id = id_departamento WHERE id_profesor IS NULL;
 SELECT pe.apellido1, pe.apellido2, pe.nombre FROM persona pe RIGHT JOIN profesor p ON pe.id = p.id_profesor LEFT JOIN asignatura a ON p.id_profesor = a.id_profesor WHERE a.id IS NULL;
 SELECT nombre FROM asignatura WHERE id_profesor IS NULL;
-SELECT d.nombre FROM departamento d 
+SELECT d.nombre FROM departamento d;
+
+-- Consultes resum
+
+SELECT COUNT(id) AS 'numero de alumnos' FROM persona WHERE tipo = 'alumno';
+SELECT COUNT(id) AS 'alumnos nacidos en 1999' FROM persona WHERE tipo = 'alumno' AND fecha_nacimiento = YEAR('1999');
+SELECT COUNT(p.id_profesor) AS 'numero de profesores', d.nombre FROM profesor p RIGHT JOIN departamento d ON P.id_departamento = d.id  GROUP BY d.nombre;
+SELECT g.nombre AS 'grado', a.tipo, SUM(a.creditos) AS 'cantidad de creditos' FROM grado g RIGHT JOIN asignatura a ON g.id = a.id_grado GROUP BY g.nombre, a.tipo;
+SELECT c.anyo_inicio AS 'año', SUM(a.id_alumno) AS 'numero de alumnos' FROM curso_escolar c LEFT JOIN alumno_se_matricula_asignatura a ON c.id = a.id_curso_escolar GROUP BY c.anyo_inicio;
+SELECT * FROM persona WHERE fecha_nacimiento = (SELECT MAX(fecha_nacimiento) FROM persona) AND tipo = 'alumno';
+SELECT p.id, p.nombre, p.apellido1, p.apellido2, d.nombre FROM persona p JOIN profesor pr ON p.id = pr.id_profesor JOIN departamento d ON pr.id_departamento = d.id AND pr.id_profesor = (SELECT id_profesor FROM asignatura WHERE id IS NULL);
+
+  
