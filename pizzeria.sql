@@ -85,12 +85,15 @@ CREATE TABLE COMANDA (
     comanda_horaEntrega TIMESTAMP,
     comanda_repartidor VARCHAR(10),
     comanda_botiga_id VARCHAR(10),
+    comanda_producte_id VARCHAR(10),
     PRIMARY KEY (comanda_id),
     FOREIGN KEY (comanda_client) REFERENCES CLIENT (client_id)
 		ON UPDATE CASCADE ON DELETE CASCADE,
 	FOREIGN KEY (comanda_repartidor) REFERENCES EMPLEAT(empleat_id)
 		ON UPDATE CASCADE ON DELETE CASCADE,
 	FOREIGN KEY (comanda_botiga_id) REFERENCES BOTIGA(botiga_id)
+		ON UPDATE CASCADE ON DELETE CASCADE,
+	FOREIGN KEY (comanda_producte_id) REFERENCES PRODUCTE(producte_id)
 		ON UPDATE CASCADE ON DELETE CASCADE
 );
 
@@ -139,7 +142,7 @@ INSERT INTO CATEGORIA VALUES ('G','Gran'),
 							 ('M','Mitjana'),
                              ('P','Petita');
                            
-INSERT INTO PRODUCTE VALUES ('H01','ham,','Hamburguesa','150 grams','ham1.jpg',9.80,NULL),
+INSERT INTO PRODUCTE VALUES ('H01','ham','Hamburguesa','150 grams','ham1.jpg',9.80,NULL),
 							('H02','ham','Hamburguesa formatge','250 grams','ham2.jpg',12.80,NULL),
                             ('H03','ham','Hamburguesa bacon','250 grams','ham3.jpg',12.80,NULL),
                             ('B01','beg','CocaCola','Refresc de cola','B1.jpg',3.80,NULL),
@@ -149,13 +152,13 @@ INSERT INTO PRODUCTE VALUES ('H01','ham,','Hamburguesa','150 grams','ham1.jpg',9
                             ('P02','piz','Pizza fortmage','amb tomaquet i formatge','Piz2.jpg',15.00,'P'),
                             ('P03','piz','Pizza Diavola','amb tomaquet i picant','Piz3.jpg',18.00,'M');
                             
-INSERT INTO COMANDA VALUES (NULL,1,CURRENT_TIMESTAMP,'a domicili',45.50,CURRENT_TIMESTAMP,'E2101','B01'),
-						   (NULL,2,CURRENT_TIMESTAMP,'a domicili',23.50,CURRENT_TIMESTAMP,'E2102','B02'),
-                           (NULL,3,CURRENT_TIMESTAMP,'a domicili',78.50,CURRENT_TIMESTAMP,'E2103','B03'),
-                           (NULL,4,CURRENT_TIMESTAMP,'a domicili',56.50,CURRENT_TIMESTAMP,'E2104','B04'),
-                           (NULL,1,CURRENT_TIMESTAMP,'al local',47.50,CURRENT_TIMESTAMP,NULL,'B02'),
-						   (NULL,2,CURRENT_TIMESTAMP,'al local',34.50,CURRENT_TIMESTAMP,NULL,'B01'),
-						   (NULL,3,CURRENT_TIMESTAMP,'al local',14.50,CURRENT_TIMESTAMP,NULL,'B03');
+INSERT INTO COMANDA VALUES (NULL,1,CURRENT_TIMESTAMP,'a domicili',45.50,CURRENT_TIMESTAMP,'E2101','B01','H01'),
+						   (NULL,2,CURRENT_TIMESTAMP,'a domicili',23.50,CURRENT_TIMESTAMP,'E2102','B02','H02'),
+                           (NULL,3,CURRENT_TIMESTAMP,'a domicili',78.50,CURRENT_TIMESTAMP,'E2103','B03','H01'),
+                           (NULL,4,CURRENT_TIMESTAMP,'a domicili',56.50,CURRENT_TIMESTAMP,'E2104','B04','H03'),
+                           (NULL,1,CURRENT_TIMESTAMP,'al local',47.50,CURRENT_TIMESTAMP,NULL,'B02','B03'),
+						   (NULL,2,CURRENT_TIMESTAMP,'al local',34.50,CURRENT_TIMESTAMP,NULL,'B01','B02'),
+						   (NULL,3,CURRENT_TIMESTAMP,'al local',14.50,CURRENT_TIMESTAMP,NULL,'B03','P03');
                            
 INSERT INTO DETALL VALUES (NULL,1,'H01',1,9.80),
 						  (NULL,1,'H02',1,12.80),
