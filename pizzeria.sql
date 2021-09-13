@@ -1,6 +1,6 @@
 -- Dades per crear la base de dades
-
-CREATE SCHEMA IF NOT EXISTS pizzeria;
+DROP DATABASE IF EXISTS pizzeria;
+CREATE DATABASE pizzeria CHARACTER SET utf8mb4 ;
 USE pizzeria;
 
 CREATE TABLE PROVINCIA (
@@ -39,6 +39,7 @@ CREATE TABLE CATEGORIA (
 
 CREATE TABLE PRODUCTE (
 	producte_id VARCHAR(10),
+    producte_tipus ENUM('piz','ham','beg'),
     producte_nom VARCHAR(20) NOT NULL,
     producte_desc VARCHAR(40) NOT NULL,
     producte_imatge BLOB,
@@ -48,6 +49,7 @@ CREATE TABLE PRODUCTE (
     FOREIGN KEY (producte_categoria) REFERENCES CATEGORIA (categoria_id)
 		ON UPDATE CASCADE ON DELETE CASCADE
 );
+
 
 CREATE TABLE BOTIGA (
 	botiga_id VARCHAR(10),
@@ -137,15 +139,15 @@ INSERT INTO CATEGORIA VALUES ('G','Gran'),
 							 ('M','Mitjana'),
                              ('P','Petita');
                            
-INSERT INTO PRODUCTE VALUES ('H01','Hamburgesa','150 grams','ham1.jpg',9.80,NULL),
-							('H02','Hamburgesa formatge','250 grams','ham2.jpg',12.80,NULL),
-                            ('H03','Hamburgesa bacon','250 grams','ham3.jpg',12.80,NULL),
-                            ('B01','CocaCola','Refresc de cola','B1.jpg',3.80,NULL),
-                            ('B02','Fanta','Refresc taronja','B2.jpg',2.80,NULL),
-                            ('B03','Estrella','Birra','B3.jpg',3.80,NULL),
-                            ('P01','Pizza Margarita','amb tomaquet','Piz1.jpg',12.00,'G'),
-                            ('P02','Pizza fortmage','amb tomaquet i formatge','Piz2.jpg',15.00,'P'),
-                            ('P03','Pizza Diavola','amb tomaquet i picant','Piz3.jpg',18.00,'M');
+INSERT INTO PRODUCTE VALUES ('H01','ham,','Hamburguesa','150 grams','ham1.jpg',9.80,NULL),
+							('H02','ham','Hamburguesa formatge','250 grams','ham2.jpg',12.80,NULL),
+                            ('H03','ham','Hamburguesa bacon','250 grams','ham3.jpg',12.80,NULL),
+                            ('B01','beg','CocaCola','Refresc de cola','B1.jpg',3.80,NULL),
+                            ('B02','beg','Fanta','Refresc taronja','B2.jpg',2.80,NULL),
+                            ('B03','beg','Estrella','Birra','B3.jpg',3.80,NULL),
+                            ('P01','piz','Pizza Margarita','amb tomaquet','Piz1.jpg',12.00,'G'),
+                            ('P02','piz','Pizza fortmage','amb tomaquet i formatge','Piz2.jpg',15.00,'P'),
+                            ('P03','piz','Pizza Diavola','amb tomaquet i picant','Piz3.jpg',18.00,'M');
                             
 INSERT INTO COMANDA VALUES (NULL,1,CURRENT_TIMESTAMP,'a domicili',45.50,CURRENT_TIMESTAMP,'E2101','B01'),
 						   (NULL,2,CURRENT_TIMESTAMP,'a domicili',23.50,CURRENT_TIMESTAMP,'E2102','B02'),

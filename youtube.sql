@@ -1,6 +1,6 @@
 -- Codi per a crear base de dades
-
-CREATE SCHEMA IF NOT EXISTS youtube;
+DROP TABLE IF EXISTS youtube;
+CREATE DATABASE youtube CHARACTER SET utf8mb4;
 USE youtube ;
 
 CREATE TABLE IF NOT EXISTS CANAL (

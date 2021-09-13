@@ -1,6 +1,6 @@
 -- Codi per a crear base de dades
-
-CREATE DATABASE IF NOT EXISTS Spoty;
+DROP DATABASE IF EXISTS Spoty;
+CREATE DATABASE Spoty CHARACTER SET utf8mb4;
 USE Spoty;
 
 CREATE TABLE IF NOT EXISTS User (

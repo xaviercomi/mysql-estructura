@@ -1,6 +1,6 @@
 -- Codi per a crear la base de dades
-
-CREATE DATABASE optica;
+DROP DATABASE IF EXISTS optica;
+CREATE DATABASE optica CHARACTER SET utf8mb4;
 USE optica;
 
 CREATE TABLE PROVEIDOR (
@@ -56,6 +56,8 @@ CREATE TABLE COMANDA (
 	comanda_num SMALLINT NOT NULL AUTO_INCREMENT,
     proveidor_NIF VARCHAR(15) NOT NULL,
     ullera_codi VARCHAR(10) NOT NULL,
+    preu_unitat DOUBLE NOT NULL, 
+    quantitat SMALLINT NOT NULL,
     date DATE NOT NULL,
     PRIMARY KEY (comanda_num),
     FOREIGN KEY (proveidor_NIF) REFERENCES PROVEIDOR(proveidor_NIF)
@@ -68,8 +70,10 @@ CREATE TABLE VENDA (
 	venda_num SMALLINT NOT NULL AUTO_INCREMENT,
     cliente_DNI VARCHAR(10) NOT NULL,
     ullera_codi VARCHAR(10) NOT NULL,
-    empleat_ID VARCHAR(10) NOT NULL,
+    preu_unitat DOUBLE NOT NULL,
+    quantitat SMALLINT NOT NULL,
     date DATE NOT NULL,
+    empleat_ID VARCHAR(10) NOT NULL,
     PRIMARY KEY (venda_num),
     FOREIGN KEY (cliente_DNI) REFERENCES CLIENTE(cliente_DNI)
         ON UPDATE CASCADE ON DELETE CASCADE,
@@ -77,32 +81,6 @@ CREATE TABLE VENDA (
         ON UPDATE CASCADE ON DELETE CASCADE,
 	FOREIGN KEY (empleat_ID) REFERENCES EMPLEAT(empleat_ID)
         ON UPDATE CASCADE ON DELETE CASCADE
-);
-
-CREATE TABLE DETALL_VENDA (
-	venda_registre SMALLINT AUTO_INCREMENT,
-    venda_num SMALLINT,
-    ullera_codi VARCHAR(10) NOT NULL,
-    preu_unitat DOUBLE NOT NULL, 
-    quantitat SMALLINT NOT NULL,
-    PRIMARY KEY (venda_registre),
-	FOREIGN KEY (venda_num) REFERENCES VENDA(venda_num)
-		ON UPDATE CASCADE ON DELETE CASCADE,
-	FOREIGN KEY (ullera_codi) REFERENCES ULLERA(ullera_codi)
-		ON UPDATE CASCADE ON DELETE CASCADE
-);
-
-CREATE TABLE DETALL_COMANDA (
-	comanda_registre SMALLINT AUTO_INCREMENT,
-	comanda_num SMALLINT,
-    ullera_codi VARCHAR(10) NOT NULL,
-    preu_unitat DOUBLE NOT NULL, 
-    quantitat SMALLINT NOT NULL,
-    PRIMARY KEY (comanda_registre),
-    FOREIGN KEY (comanda_num) REFERENCES COMANDA(comanda_num)
-		ON UPDATE CASCADE ON DELETE CASCADE,
-	FOREIGN KEY (ullera_codi) REFERENCES ULLERA(ullera_codi)
-		ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 -- Dades de la base de dades
@@ -136,41 +114,24 @@ INSERT INTO ULLERA VALUES ('U765','Boss',.75,.56,'pasta','negro','azul','azul',1
                           ('U678','Armani',.56,.26,'plastico','negro','transparete','transparente',75.60),
                           ('U747','Okley',.75,.16,'pasta','negro','azul','azul',9.00);
 		
-INSERT INTO VENDA VALUES (NULL,'34567890T','U789','JC6756','2019-01-01'),
-						 (NULL,'56782374G','U789','GM6345','2019-02-14'),
-                         (NULL,'34567890T','U677','JC6756','2019-03-18'),
-                         (NULL,'56782374G','U789','CC6345','2020-04-16'),
-                         (NULL,'34567890T','U765','EG6345','2020-11-05'),
-                         (NULL,'47863463G','U789','GM6345','2020-12-03'),
-                         (NULL,'34567890T','U678','JC6756','2020-03-04'),
-                         (NULL,'47654236H','U789','EG6345','2021-09-06'),
-                         (NULL,'34567890T','U747','JC6756','2021-10-21'),
-                         (NULL,'98765432J','U789','CC6356','2021-07-13'),
-                         (NULL,'47654236H','U789','GM6345','2021-08-07');
+INSERT INTO VENDA VALUES (NULL,'34567890T','U789',90.56,1,'2019-01-01','JC6756'),
+						 (NULL,'56782374G','U789',98.58,1,'2019-02-14','GM6345'),
+                         (NULL,'34567890T','U677',105.58,1,'2019-03-18','JC6756'),
+                         (NULL,'56782374G','U789',134.88,1,'2020-04-16','GM6345'),
+                         (NULL,'34567890T','U765',120.08,1,'2020-11-05','GM6345'),
+                         (NULL,'47863463G','U789',70.77,1,'2020-12-03','GM6345'),
+                         (NULL,'34567890T','U678',79.88,3,'2020-03-04','JC6756'),
+                         (NULL,'47654236H','U789',55.00,2,'2021-09-06','CC6356'),
+                         (NULL,'34567890T','U747',76.58,4,'2021-10-21','CC6356'),
+                         (NULL,'98765432J','U789',45.66,3,'2021-07-13','JC6756'),
+                         (NULL,'47654236H','U789',87.87,2,'2021-08-07','CC6345');
                          
-INSERT INTO  COMANDA VALUES (NULL,'PRO23','U789','2019-01-15'),
-							(NULL,'PRO56','U765','2019-06-14'),
-                            (NULL,'PRO76','U456','2020-01-16'),
-                            (NULL,'PRO78','U768','2020-06-16'),
-                            (NULL,'PRO89','U747','2021-01-15');    
+INSERT INTO  COMANDA VALUES (NULL,'PRO23','U789','78.5','50','2019-01-15'),
+							(NULL,'PRO56','U765','45.5','150','2019-06-14'),
+                            (NULL,'PRO76','U456','67.5','20','2020-01-16'),
+                            (NULL,'PRO78','U768','35.5','45','2020-06-16'),
+                            (NULL,'PRO89','U747','23.5','70','2021-01-15');    
                             
-INSERT INTO DETALL_COMANDA VALUES (NULL,1,'U765',78.00,50),	
-								  (NULL,2,'U456',70.00,10),
-                                  (NULL,3,'U768',67.89,30),
-                                  (NULL,4,'U747',65.67,70),
-                                  (NULL,5,'U678',78.50,25);
-                                  
-INSERT INTO DETALL_VENDA VALUES (NULL,1,'U789',125.00,1),
-								(NULL,2,'U765',140.00,2),
-								(NULL,3,'U747',111.00,1),
-                                (NULL,4,'U789',150.00,2),
-								(NULL,5,'U678',180.00,1),
-                                (NULL,6,'U789',125.00,1),
-								(NULL,7,'U765',140.00,2),
-								(NULL,8,'U747',111.00,1),
-                                (NULL,9,'U789',150.00,2),
-								(NULL,10,'U678',180.00,1),
-                                (NULL,11,'U677',180.00,2);
                                 
 -- Cerca a la base de dades
 
