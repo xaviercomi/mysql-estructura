@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS VIDEO (
   video_visionat INT NOT NULL COMMENT 'visionat fa referència a la quantitat de vegades que s’ha vist el vídeo. ',
   video_thumbnail BLOB NOT NULL,
   video_publicat VARCHAR(10) NOT NULL COMMENT 'video_publicat correspon a la identificació (nif) de l’usuari que ha publicat el vídeo.',
-  video_estat_id ENUM('public','privat','ocult'),
+  video_estat ENUM('public','privat','ocult'),
   video_dataPublicacio DATETIME NOT NULL,
   PRIMARY KEY (video_id),
     FOREIGN KEY (video_publicat) REFERENCES USUARI(usuari_nif)
@@ -37,23 +37,28 @@ CREATE TABLE IF NOT EXISTS COMENTARI (
   comentari_id VARCHAR(10) NOT NULL,
   comentari_text VARCHAR(150) NOT NULL,
   comentari_data DATE NOT NULL,
-  comentari_video_id VARCHAR(10) NOT NULL,
+  usuari_nif VARCHAR(10),
+  video_id VARCHAR(10),
   PRIMARY KEY (comentari_id),
-	FOREIGN KEY (comentari_video_id)
-    REFERENCES VIDEO(video_id)
+  FOREIGN KEY (usuari_nif) REFERENCES USUARI (usuari_nif)
+    ON DELETE CASCADE ON UPDATE CASCADE,
+	FOREIGN KEY (video_id) REFERENCES VIDEO(video_id)
+    ON DELETE CASCADE ON UPDATE CASCADE);
+    
+CREATE TABLE IF NOT EXISTS LIKES_COMENTARI (
+	likesComent_estat ENUM('public','privat','ocult'),
+	likesComent_data DATETIME NOT NULL,
+	likesComent_usuari_nif VARCHAR(10) NOT NULL,
+	likesComent_comentari_id VARCHAR(10) NOT NULL,
+    FOREIGN KEY (likesComent_usuari_nif)
+    REFERENCES USUARI(usuari_nif)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+    FOREIGN KEY (likesComent_comentari_id)
+    REFERENCES COMENTARI(comentari_id)
     ON DELETE CASCADE
     ON UPDATE CASCADE);
-
-CREATE TABLE IF NOT EXISTS COMENTARI_USUARI (
-  comentari_usuari_valoracio ENUM('agrada','no agrada'),
-  comentari_usuari_data DATE NOT NULL,
-  comentari_usuari_usuari_nif VARCHAR(10) NOT NULL,
-  comentari_usuari_comentari_id VARCHAR(10) NOT NULL,
-    FOREIGN KEY (comentari_usuari_comentari_id) REFERENCES COMENTARI (comentari_id)
-    ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (comentari_usuari_usuari_nif) REFERENCES USUARI (usuari_nif)
-    ON DELETE CASCADE ON UPDATE CASCADE);
-
+    
 CREATE TABLE IF NOT EXISTS ETIQUETA (
   etiqueta_id VARCHAR(10) NOT NULL,
   etiqueta_nom VARCHAR(10) NOT NULL,
@@ -71,9 +76,8 @@ CREATE TABLE IF NOT EXISTS ETIQUETADO (
     ON DELETE CASCADE
     ON UPDATE CASCADE);
 
-CREATE TABLE IF NOT EXISTS LIKES (
-  likes_like INT NOT NULL DEFAULT '0',
-  likes_dislike INT NOT NULL DEFAULT '0',
+CREATE TABLE IF NOT EXISTS LIKES_VIDEO (
+  likes_estat ENUM('public','privat','ocult'),
   likes_data DATETIME NOT NULL,
   likes_usuari_nif VARCHAR(10) NOT NULL,
   likes_video_id VARCHAR(10) NOT NULL,
@@ -101,8 +105,8 @@ CREATE TABLE IF NOT EXISTS SUBSCRIPCIO (
 
 CREATE TABLE IF NOT EXISTS VIDEO_PLAYLIST (
   playlist_usuari_nif VARCHAR(10) NOT NULL,
-  playlist_playlist_id VARCHAR(10) NOT NULL,
-    FOREIGN KEY (playlist_playlist_id)
+  playlist_id VARCHAR(10) NOT NULL,
+    FOREIGN KEY (playlist_id)
     REFERENCES PLAYLIST(playlist_id)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
@@ -134,9 +138,9 @@ INSERT INTO VIDEO VALUES ('V001','Dog','Dog talking','dogTalk.mov',2.45,120,2000
 						 ('V002','Cat','Cat talking','catTalk.mov',1.00,60,1000,'/piccat.png','45346778K','3','2017-5-12'),
 						 ('V003','Fish','Fish talking','fishTalk.mov',1.56,80,6000,'/picfish.png','78893467T','2','2020-6-15');
                          
-INSERT INTO LIKES VALUES (1,0,'2020-9-12','45671234H','V001'),
-						 (0,1,'2018-5-15','45346778K','V002'),
-                         (1,0,'2020-1-30','78893467T','V003');
+INSERT INTO LIKES_VIDEO VALUES ('ocult','2020-9-12','45671234H','V001'),
+							   ('privat','2018-5-15','45346778K','V002'),
+                               ('public','2020-1-30','78893467T','V003');
                          
 INSERT INTO ETIQUETA VALUES ('E20','Animals'),
 							('E30','Cats'),
@@ -146,14 +150,10 @@ INSERT INTO ETIQUETADO VALUES ('E20','V001'),
 							  ('E30','V002'),
                               ('E40','V003');
                               
-INSERT INTO COMENTARI VALUES ('COM1','i like it','2021-1-11','V001'),
-							 ('COM2','i like it','2019-3-1','V002'),
-                             ('COM3','i like it','2016-8-12','V003');
+INSERT INTO COMENTARI VALUES ('COM1','i like it','2021-1-11','45671234H','V001'),
+							 ('COM2','i like it','2019-3-1','45346778K','V002'),
+                             ('COM3','i like it','2016-8-12','78893467T','V003');
                              
-INSERT INTO COMENTARI_USUARI VALUES ('agrada','2019-12-7','45671234H','COM1'),
-									('no agrada','2020-12-6','45346778K','COM2'),
-									('no agrada','2021-8-9','78893467T','COM3');
-									
 
 
 

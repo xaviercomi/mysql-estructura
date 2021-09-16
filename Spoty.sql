@@ -40,7 +40,7 @@ CREATE TABLE IF NOT EXISTS SubscriptionPayment (
 
 CREATE TABLE IF NOT EXISTS Playlist (
   Playlist_Code INT NOT NULL,
-  Playliust_status ENUM('active','delete'),
+  Playlist_status ENUM('active','delete'),
   Title VARCHAR(45) NOT NULL,
   SongsNum INT NOT NULL,
   Created DATE NOT NULL,
@@ -70,7 +70,7 @@ CREATE TABLE IF NOT EXISTS Artist (
   Name VARCHAR(45) NULL,
   Photo BLOB NULL,
   Related_idArtist INT NOT NULL,
-  PRIMARY KEY (idArtist, Related_idArtist),
+  PRIMARY KEY (idArtist),
     FOREIGN KEY (Related_idArtist)
     REFERENCES Artist(idArtist)
     ON DELETE CASCADE
